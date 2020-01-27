@@ -6,23 +6,41 @@ import { Provider } from 'react-redux';
 
 
 const intialState = {
-    products: [{ "product_name": "item 1", "qty": 10 }, { "product_name": "item 2", "qty": 100 }, { "product_name": "item 3", "qty": 50 }],
+    products: [{ "id": "1" ,"product": "item 1", "qty": 50 }, { "id":"2", "product": "item 2", "qty": 50 }, { "id":"3", "product": "item 3", "qty": 50 }],
     cartedProducts: []
 }
 function reducer(state = intialState, action) {
-    debugger;
     if (action.type === "ADD_TO_CART") {
+        let localCartedProducts = [...state.cartedProducts];
+        let localProducts = [...state.products];
+        if (localCartedProducts.length === 0) {
+            let productFound = localProducts.find( async (product) => product.id === action.id ? product:"");
+            localCartedProducts.push(productFound);
+        } else {
+            for (let iterator=0;iterator<localCartedProducts.length;++iterator) {
+                if (localCartedProducts[iterator].id === action.id) {
+                    localCartedProducts[iterator].qty++;
+                }
+            }
+        }
+
+        for (let iterator=0;iterator<localProducts.length;++iterator) {
+            if (localProducts[iterator].id === action.id) {
+                localProducts[iterator].qty--;
+            }
+        }
         return {
-            cartedProducts: [...state.cartedProducts, state.products[0]],
-            products: state.products.filter(() => state.products[0])
+            cartedProducts: localCartedProducts,
+            products: localProducts
         };
-    } else {
+    }
+
+    else {
 
         return { ...state };
     }
 }
 const store = createStore(reducer);
-store.dispatch({ type: "ADD_TO_CART" });
 
 ReactDOM.render(
     <Provider store={store}>

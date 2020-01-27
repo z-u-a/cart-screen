@@ -1,24 +1,42 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { MdAddShoppingCart } from "react-icons/md";
+import { Grid, Row, Col } from 'react-flexbox-grid';
 
-class ProductListingPage extends React.Component {
-    render() {
-        return (
-            <React.Fragment>
-                <h3>Product Listing Page</h3>
-                <ol>
-                    {this.props.products.map((product, index) => <li key={index}>{product.product_name}</li>)}
-                </ol>
-            </React.Fragment>
-        );
+
+function ProductListingPage () {
+
+    const products = useSelector(
+        state => state.products
+    );
+
+    const dispatch = useDispatch();
+    const addToCart = (event) => {
+        dispatch({ type: "ADD_TO_CART", id: event.target.id });
     }
+    return (
+        <React.Fragment>
+            <h3>Product Listing Page</h3>
+            <ol>
+                {products.map((product, index) =>
+                    <Grid fluid>
+                        <Row key={index}>
+                            <Col >
+                                <li >{product.product}</li>
+                            </Col>
+                            <Col >
+                                {product.qty}
+                            </Col >
+                            <Col>
+                                <MdAddShoppingCart id={product.id} onClick={addToCart} />
+                            </Col>
+                        </Row>
+
+                    </Grid>
+                )}
+            </ol>
+        </React.Fragment>
+    );
 }
 
-function mapStateToProps(state) {
-    debugger;
-    return {
-        ...state,
-        products: state.products
-    };
-}
-export default connect(mapStateToProps)(ProductListingPage);
+export default ProductListingPage;
