@@ -16,7 +16,7 @@ function CartPage () {
             <h3>Cart</h3>
             <ol>
                 {cartedProducts.map((product, index) =>
-                    <Grid fluid>
+                    <Grid key={index} fluid>
                         <Row >
                             <Col>
                                 <li key={index}>{product.product}</li>
