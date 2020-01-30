@@ -4,11 +4,12 @@ import { MdAddShoppingCart } from "react-icons/md";
 import { Grid, Row, Col } from 'react-flexbox-grid';
 
 
-function ProductListingPage () {
+function ProductListingPage() {
 
     const products = useSelector(
         state => state.products
     );
+
     const dispatch = useDispatch();
     const addToCart = (event) => {
         dispatch({ type: "ADD_TO_CART", id: event.target.id });
@@ -17,21 +18,22 @@ function ProductListingPage () {
         <React.Fragment>
             <h3>Product Listing Page</h3>
             <ol>
-                {products.map((product, index) =>
-                    <Grid key={index} fluid>
+                {products.map((product, index) => {
+                    return <Grid key={index} fluid>
                         <Row >
                             <Col >
-                                <li >{product.product}</li>
+                                {product.product}
                             </Col>
                             <Col >
                                 {product.qty}
                             </Col >
-                            <Col >
+                            <Col id={product.id} >
                                 <MdAddShoppingCart id={product.id} onClick={addToCart} />
                             </Col>
                         </Row>
 
                     </Grid>
+                }
                 )}
             </ol>
         </React.Fragment>

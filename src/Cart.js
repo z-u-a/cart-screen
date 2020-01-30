@@ -1,35 +1,35 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Grid, Row, Col } from 'react-flexbox-grid';
-import { GiReturnArrow } from "react-icons/gi";
+import { MdRemoveShoppingCart } from "react-icons/md";
 
-function CartPage () {
+function CartPage() {
     const cartedProducts = useSelector(
         state => state.cartedProducts
     );
-
-    const returnFromCart = () => {
-        dispatchEvent({type: "RETURN_FROM_CART"});
+    const dispatch = useDispatch();
+    const returnFromCart = (event) => {
+        event.target.id ? dispatch({ type: "RETURN_FROM_CART", id: event.target.id }) : alert("Please click again");
     }
     return (
         <React.Fragment>
             <h3>Cart</h3>
             <ol>
-                {cartedProducts.map((product, index) =>
-                    <Grid key={index} fluid>
+                {cartedProducts.map((product, index) => {
+                    return <Grid key={index} fluid>
                         <Row >
-                            <Col>
-                                <li key={index}>{product.product}</li>
+                            <Col >
+                                {product.product}
                             </Col>
-                            <Col>
-                                {index}>{product.qty}
+                            <Col >
+                                {product.qty}
                             </Col>
-                            <Col>
-                                <GiReturnArrow onClick={returnFromCart} />
+                            <Col id={product.id}>
+                                <MdRemoveShoppingCart id={product.id} onClick={returnFromCart} />
                             </Col>
                         </Row>
-
                     </Grid>
+                }
                 )}
             </ol>
         </React.Fragment>
